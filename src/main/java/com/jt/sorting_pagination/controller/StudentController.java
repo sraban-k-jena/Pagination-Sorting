@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jt.sorting_pagination.dto.StudentDTO;
 import com.jt.sorting_pagination.dto.StudentResponseDTO;
-import com.jt.sorting_pagination.model.Student;
 import com.jt.sorting_pagination.service.StudentService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin
@@ -31,7 +33,13 @@ public class StudentController {
     public StudentService service;
 
     @PostMapping("/addStudent")
-    public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<?> addStudent(@Valid @RequestBody StudentDTO studentDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Return validation errors as a response
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
+        // If no validation errors, proceed with saving the data
         StudentDTO studentDTO2 = service.addStudent(studentDTO);
         return new ResponseEntity<>(studentDTO2, HttpStatus.CREATED);
     }
@@ -74,4 +82,5 @@ public class StudentController {
         StudentResponseDTO studentDTO = service.getStudentWithPagination(pageNo, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(studentDTO, HttpStatus.OK);
     }
+
 }

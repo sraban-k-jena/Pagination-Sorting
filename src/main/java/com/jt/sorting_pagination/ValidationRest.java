@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SortingPaginationApplication {
+public class ValidationRest {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SortingPaginationApplication.class, args);
+		SpringApplication.run(ValidationRest.class, args);
 	}
 
 }
